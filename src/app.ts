@@ -4,6 +4,7 @@ import { errorMiddleWare } from "./middlewares/error.js";
 import NodeCache from "node-cache";
 import { config } from "dotenv";
 import morgan from "morgan";
+import cors from "cors"
 
 //Importing Routes
 import userRoutes from "./routes/user.js";
@@ -47,7 +48,12 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
+const corsOptions={
+  origin: ['http://localhost:5173'],
+}
+
 const app = express();
+app.use(cors(corsOptions))
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use(express.json());
 app.use(morgan("dev"));

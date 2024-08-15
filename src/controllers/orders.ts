@@ -23,7 +23,6 @@ export const newOrder = TryCatch(
       total,
     } = req.body;
 
-    console.log(orderedItems);
 
     if (!shippingInfo || !orderedItems || !user || !subtotal || !tax || !total)
       return next(new ErrorHandler("Please Enter all the fields", 400));

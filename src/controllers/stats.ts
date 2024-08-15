@@ -235,8 +235,9 @@ export const getStats = TryCatch(async (req, res, next) => {
 
 export const getPieStats = TryCatch(async (req, res, next) => {
   let pieCharts;
-  if (myCache.has("admin-pie-charts")) {
-    JSON.parse(myCache.get("admin-pie-charts") as string);
+  const cacheKye = "admin-pie-charts";
+  if (myCache.has(cacheKye)) {
+    pieCharts = JSON.parse(myCache.get(cacheKye) as string);
   } else {
     const allOrdersPromise = Order.find().select([
       "total",
@@ -295,8 +296,8 @@ export const getPieStats = TryCatch(async (req, res, next) => {
     allOrders.forEach((order) => {
       grossMargin += order.total ? order.total : 0;
       discount += order.discount ? order.discount : 0;
-      // shippingCost += order.shippingCharges ? order.shippingCharges : 0;
-      // tax += order.tax ? order.tax :0 ;
+      shippingCost += order.shippingCharges ? order.shippingCharges : 0;
+      tax += order.tax ? order.tax :0 ;
       marketingCost = Math.round(grossMargin * 0.3);
     });
 
@@ -343,7 +344,7 @@ export const getPieStats = TryCatch(async (req, res, next) => {
     //   },
     // ]);
 
-    myCache.set("admin-pie-charts", JSON.stringify(pieCharts));
+    myCache.set(cacheKye, JSON.stringify(pieCharts));
   }
 
   return res.status(200).json({
@@ -445,15 +446,12 @@ export const getLineStats = TryCatch(async (req, res, next) => {
       "total",
     ]);
 
-    const [
-      TwelveMonthsProducts,
-      TwelveMonthsUsers,
-      TwelveMonthsOrders,
-    ] = await Promise.all([
-      lastTwelveMonthsProductsPromise,
-      lastTwelveMonthsUsersPromise,
-      lastTwelveMonthsOrderPromise,
-    ]);
+    const [TwelveMonthsProducts, TwelveMonthsUsers, TwelveMonthsOrders] =
+      await Promise.all([
+        lastTwelveMonthsProductsPromise,
+        lastTwelveMonthsUsersPromise,
+        lastTwelveMonthsOrderPromise,
+      ]);
 
     const productCounts = getChartData({
       length: 12,
