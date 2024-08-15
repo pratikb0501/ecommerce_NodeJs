@@ -17,14 +17,14 @@ export const newProduct = TryCatch(
     res: Response,
     next: NextFunction
   ) => {
-    const { name, price, stock, category } = req.body;
+    const { name, description, price, stock, category } = req.body;
     const photo = req.file;
 
     if (!photo) {
       return next(new ErrorHandler("Please add photo", 400));
     }
 
-    if (!name || !price || !stock || !category) {
+    if (!name || !description || !price || !stock || !category) {
       rm(photo.path, () => {});
       return next(new ErrorHandler("Please enter all fields", 400));
     }
@@ -33,6 +33,7 @@ export const newProduct = TryCatch(
       name,
       price,
       stock,
+      description,
       category: category.toLowerCase(),
       photo: photo.path,
     });
@@ -116,7 +117,7 @@ export const getSingleProduct = TryCatch(async (req, res, next) => {
 
 export const updateProduct = TryCatch(async (req, res, next) => {
   const { id } = req.params;
-  const { name, price, stock, category } = req.body;
+  const { name, description, price, stock, category } = req.body;
   const photo = req.file;
 
   const product = await Product.findById(id);
@@ -132,6 +133,9 @@ export const updateProduct = TryCatch(async (req, res, next) => {
 
   if (name) {
     product.name = name;
+  }
+  if (description) {
+    product.description = description;
   }
   if (price) {
     product.price = price;
@@ -205,10 +209,23 @@ export const getAllProducts = TryCatch(
       baseQuery.category = category;
     }
 
-    const productsPromise = Product.find(baseQuery)
+    let productsPromise;
+    if(sort){
+      productsPromise = Product.find(baseQuery)
       .sort(sort && { price: sort === "asc" ? 1 : -1 })
       .limit(limit)
       .skip(skip);
+    }else{
+      productsPromise = Product.find(baseQuery)
+      .limit(limit)
+      .skip(skip);
+    }
+    
+
+    // const productsPromise = Product.find(baseQuery)
+    //   .sort(sort && { price: sort === "asc" ? 1 : -1 })
+    //   .limit(limit)
+    //   .skip(skip);
 
     const filteredProductsPromise = Product.find(baseQuery);
 

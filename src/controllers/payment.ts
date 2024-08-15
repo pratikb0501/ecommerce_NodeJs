@@ -5,7 +5,6 @@ import ErrorHandler from "../utils/utility-class.js";
 
 export const createPayment = TryCatch(async (req, res, next) => {
   const { amount } = req.body;
-  console.log("THis is the amount*********",typeof amount)
 
   if (!amount) {
     return next(new ErrorHandler("Please provide valid amount", 400));
@@ -19,7 +18,7 @@ export const createPayment = TryCatch(async (req, res, next) => {
 
   return res.status(201).json({
     success: true,
-    clientSecrett: paymentIntent.client_secret,
+    clientSecret: paymentIntent.client_secret,
   });
 });
 
@@ -29,12 +28,12 @@ export const newCoupon = TryCatch(async (req, res, next) => {
     return next(new ErrorHandler("Please enter coupon code and amount", 400));
   }
   await Coupon.create({
-    couponCode,
+    couponCode:couponCode.toLowerCase(),
     amount,
   });
   return res.status(201).json({
     success: true,
-    message: `Coupon ${couponCode} created successfully`,
+    message: `Coupon ${couponCode} created`,
   });
 });
 
