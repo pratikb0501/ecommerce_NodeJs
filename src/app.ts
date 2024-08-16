@@ -49,7 +49,7 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 const corsOptions={
-  origin: ['https://titanstore-csuf-bxuxzl4od-pratikb0501s-projects.vercel.app'],
+  origin: ['https://titanstore-csuf-bxuxzl4od-pratikb0501s-projects.vercel.app','http://localhost:5173/'],
 }
 
 const app = express();
