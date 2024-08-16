@@ -39,7 +39,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `https://titanstore-csuf.vercel.app/`,
+        url: `https://titanstore-csuf-bxuxzl4od-pratikb0501s-projects.vercel.app/`,
       },
     ],
   },
