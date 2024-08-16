@@ -4,6 +4,7 @@ import {
   getAdminProducts,
   getAllCategories,
   getAllProducts,
+  getAllProductsWithoutLimit,
   getLatestProducts,
   getSingleProduct,
   newProduct,
@@ -28,6 +29,9 @@ app.get("/admin-products", adminOnly, getAdminProducts);
 
 //route - /api/v1/products/all
 app.get("/all", getAllProducts);
+
+//route - /api/v1/products/admin
+app.get("/admin",getAllProductsWithoutLimit)
 
 //route - /api/v1/products/:id
 app

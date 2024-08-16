@@ -1,3 +1,6 @@
+import { NextFunction, Request, Response } from "express";
+import { rm } from "fs";
+import { myCache } from "../app.js";
 import { TryCatch } from "../middlewares/error.js";
 import { Product } from "../models/products.js";
 import {
@@ -5,11 +8,8 @@ import {
   NewProductRequestBody,
   SearchRequestQuery,
 } from "../types/types.js";
-import { Request, Response, NextFunction } from "express";
-import ErrorHandler from "../utils/utility-class.js";
-import { rm } from "fs";
-import { myCache } from "../app.js";
 import { invalidatesCache } from "../utils/features.js";
+import ErrorHandler from "../utils/utility-class.js";
 
 export const newProduct = TryCatch(
   async (
@@ -243,3 +243,13 @@ export const getAllProducts = TryCatch(
     });
   }
 );
+
+export const getAllProductsWithoutLimit = TryCatch(
+  async (req,res,next)=>{
+    const products = await Product.find().sort({ createdAt: -1 });
+    return res.status(201).json({
+      success: true,
+      products
+    });
+  }
+)
