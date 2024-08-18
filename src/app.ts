@@ -1,20 +1,20 @@
-import { connectDB } from "./utils/features.js";
-import express from "express";
-import { errorMiddleWare } from "./middlewares/error.js";
-import NodeCache from "node-cache";
+import cors from "cors";
 import { config } from "dotenv";
+import express from "express";
 import morgan from "morgan";
-import cors from "cors"
+import NodeCache from "node-cache";
+import { errorMiddleWare } from "./middlewares/error.js";
+import { connectDB } from "./utils/features.js";
 
 //Importing Routes
-import userRoutes from "./routes/user.js";
-import productRoutes from "./routes/products.js";
+import Stripe from "stripe";
+import swaggerJsDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 import orderRoutes from "./routes/orders.js";
 import paymentRoutes from "./routes/payment.js";
+import productRoutes from "./routes/products.js";
 import dashboardRoutes from "./routes/stats.js";
-import Stripe from "stripe";
-import swaggerUi from "swagger-ui-express";
-import swaggerJsDoc from "swagger-jsdoc";
+import userRoutes from "./routes/user.js";
 
 config({
   path: "./.env",
@@ -39,21 +39,22 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `http://localhost:4000`,
+        url: `https://titanstore-csuf.vercel.app/`,
       },
     ],
   },
-  apis: ["./routes/*.js"]
+  apis: ["./routes/*.js"],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
-const corsOptions={
-  origin: ['http://localhost:5173'],
-}
+// const corsOptions={
+//   origin: ['http://localhost:5173'],
+// }
 
 const app = express();
-app.use(cors(corsOptions))
+// app.use(cors(corsOptions))
+app.use(cors());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use(express.json());
 app.use(morgan("dev"));
