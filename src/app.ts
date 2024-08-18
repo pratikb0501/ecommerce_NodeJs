@@ -48,12 +48,14 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
-const corsOptions={
-  origin: ['https://titanstore-csuf.vercel.app/','http://localhost:5173/'],
-}
+// const corsOptions={
+//   origin: ['http://localhost:5173'],
+// }
 
 const app = express();
-app.use(cors(corsOptions))
+// app.use(cors(corsOptions))
+app.use(cors());
+
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use(express.json());
 app.use(morgan("dev"));
