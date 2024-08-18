@@ -1,0 +1,14 @@
+{
+  "version":1,
+  "name":"titanstore_backend",
+  "builds":[{
+    "src":"dist/app.js",
+    "use":"@vercel/node"
+  }],
+  "routes":[
+    {
+      "src":"/(.*)",
+      "dest":"/"
+    }
+  ]
+}
